@@ -1,0 +1,34 @@
+name: moderation_agora_bridge_flutter
+description: "Bridge that feeds Agora RTC video frames into the Nosmai Moderation SDK for on-device, real-time live-stream moderation. Thin glue only: it ships no models and no SDK."
+version: 0.0.1
+homepage: https://github.com/nosmai/moderation_agora_bridge_flutter
+
+environment:
+  sdk: ^3.5.0
+  flutter: ">=3.3.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^2.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+# The Nosmai Moderation SDK + models live in `nosmai_moderation_sdk`, and Agora
+# in `agora_rtc_engine`. This bridge deliberately does NOT depend on either: it
+# talks to the app's already-installed Nosmai plugin over the in-process JNI /
+# ObjC runtime (no frame pixels cross the Dart boundary), and it only needs the
+# Agora native SDK at COMPILE time (provided by the app's agora_rtc_engine).
+# The host app is expected to already depend on both packages.
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.nosmai.moderation_agora_bridge_flutter
+        pluginClass: ModerationAgoraBridgeFlutterPlugin
+      ios:
+        pluginClass: ModerationAgoraBridgeFlutterPlugin

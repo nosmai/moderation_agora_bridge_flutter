@@ -1,0 +1,58 @@
+group = "com.nosmai.moderation_agora_bridge_flutter"
+version = "1.0-SNAPSHOT"
+
+buildscript {
+    ext.kotlin_version = "2.1.0"
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.9.1")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://download.agora.io/sdk/release/' }
+    }
+}
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+android {
+    namespace = "com.nosmai.moderation_agora_bridge_flutter"
+
+    compileSdk = 34
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+    }
+
+    defaultConfig {
+        minSdk = 24
+    }
+
+    dependencies {
+        // Agora is provided by the app's `agora_rtc_engine` plugin at runtime;
+        // we only need it to COMPILE the frame observer, so it is compile-only
+        // and never bundled by this package.
+        compileOnly("io.agora.rtc:full-sdk:4.5.2")
+        // The Nosmai Moderation SDK is reached over reflection at runtime (see
+        // VideoModerationController) — this package declares no Nosmai dependency
+        // and ships no models.
+    }
+}
